@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/textViewCategory"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="TextView"
+    android:clickable="true"
+    android:textColor="?attr/textcolorOfMain"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    android:padding="6dp"
+    android:background="?attr/backgroundcolorOfCategory"
+    android:foreground="?android:attr/selectableItemBackground">
+</TextView>

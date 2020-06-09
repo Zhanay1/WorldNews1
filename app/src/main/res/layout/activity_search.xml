@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroungColorWhite"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/lineForSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundcolorOfToolBar"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/switchDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"/>
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appBarLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/card_source_radius"
+            android:cursorVisible="true"
+            android:drawableLeft="@drawable/search_source"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/allerta"
+            android:hint="@string/search_hint"
+            android:textColorHint="?attr/textcolorOfMain"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:padding="8dp"
+            android:selectAllOnFocus="false"
+            android:textColor="?attr/textcolorOfMain" />
+    </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_navigation"
+        app:itemHorizontalTranslationEnabled="false"
+        android:background="?attr/backgroungColorOfBottom"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewSources"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lineForSearch"
+        android:layout_above="@+id/bottom_navigation"/>
+
+</RelativeLayout>

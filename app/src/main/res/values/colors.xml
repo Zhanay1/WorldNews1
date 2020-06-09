@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorPrimaryLight">#fff</color>
+    <color name="colorAccent">#5581F0</color>
+    <color name="categoryBackground">#ECF5FC</color>
+    <color name="categoryColor">#80AAD1</color>
+    <color name="categoryStandardColor">#757575</color>
+    <color name="backgroundOfMainActivity">#ECEDF1</color>
+</resources>

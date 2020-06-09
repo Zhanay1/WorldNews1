@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ds">
+        <attr name="backgroundcolorOfToolBar" format="color"/>
+        <attr name="textcolorOfMain" format="color"/>
+        <attr name="backgroundColorOfIcon" format="color"/>
+        <attr name="textColorOfTitle" format="color"/>
+        <attr name="backgroundcolorOfCategory" format="color"/>
+        <attr name="backgroundcolorOfCategorySelected" format="color"/>
+        <attr name="backgroundcolorOfCategoryStroke" format="color"/>
+        <attr name="backgroungColorWhite" format="color"/>
+        <attr name="backgroungColorOfCard" format="color"/>
+        <attr name="backgroungColorOfBottom" format="color"/>
+        <attr name="backgroungColorOfReadMore" format="color"/>
+    </declare-styleable>
+</resources>
