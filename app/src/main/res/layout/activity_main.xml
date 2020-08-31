@@ -55,6 +55,8 @@
         android:layout_alignParentBottom="true"
         app:itemHorizontalTranslationEnabled="false"
         android:layout_gravity="bottom"
+        android:background="?attr/backgroungColorOfBottom"
         app:menu="@menu/bottom_navigation"
-        android:background="?attr/backgroungColorOfBottom" />
+        app:itemTextColor="@drawable/background_bottom_nav"
+        app:itemIconTint="@drawable/background_bottom_nav"/>
 </LinearLayout>

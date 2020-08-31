@@ -42,11 +42,21 @@ public class WebViewActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Toolbar toolbar;
     private TextView textViewTitle;
+    SharedPref mySharedPref ;
+    private static int currentTheme;
 
     private NewsViewModel newsViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mySharedPref = new SharedPref(this);
+        if(mySharedPref.loadNightModeState() == true){
+            setTheme(R.style.DarkTheme);
+            currentTheme = R.style.DarkTheme;
+        }else{
+            setTheme(R.style.AppTheme);
+            currentTheme = R.style.AppTheme;
+        }
         setContentView(R.layout.activity_web_view);
         progressBar = findViewById(R.id.progressBarLoading);
         toolbar = findViewById(R.id.toolBar);
@@ -140,7 +150,7 @@ public class WebViewActivity extends AppCompatActivity {
             String ShareSub = title;
             intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
             intent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(intent, "Share using"));
+            startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
         }
         else if (id == R.id.Favorites) {
             FavoriteNews favoriteNews = newsViewModel.getFavoriteNewsByTitle(this.title);

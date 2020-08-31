@@ -1,9 +1,25 @@
 <resources>
-    <string name="app_name">Global News</string>
+    <string name="app_name" translatable="false">Global News</string>
     <string name="add_to_favorites">Added to favorites</string>
     <string name="delete_of_favorites">Delete from favorites</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="search_hint">Search. . .</string>
-    <string name="global_news_toolbar">Global News</string>
-    <string name="dark_mode">Dark mode</string>
+    <string name="global_news_toolbar" translatable="false">Global News</string>
+    <string name="dark_mode" translatable="false">Dark mode</string>
+    <string name="news_bottom">News</string>
+    <string name="favorites_bottom">Favorites</string>
+    <string name="search_bottom">Search</string>
+    <string name="news_content_description">News</string>
+    <string name="read_more">Read More</string>
+    <string name="global_news" translatable="false">Global News</string>
+    <string name="general_category">General</string>
+    <string name="entertainment_category">Entertainment</string>
+    <string name="business_category">Business</string>
+    <string name="health_category">Health</string>
+    <string name="science_category">Science</string>
+    <string name="sports_category">Sports</string>
+    <string name="technology_category">Technology</string>
+    <string name="unknown">Unknown</string>
+    <string name="share_using">Share using</string>
+    <string name="check_connection">Check internet connection</string>
 </resources>

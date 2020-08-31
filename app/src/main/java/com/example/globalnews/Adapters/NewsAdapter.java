@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -117,13 +118,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> im
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setClipToOutline(true);
         }
-        Picasso.get().load(news1.getUrlToImage()).resize(640,360).placeholder(R.drawable.news).into(imageView); // download  image
+        if(news1.getUrlToImage() != null && !news1.getUrlToImage().isEmpty()) {
+            Picasso.get().load(news1.getUrlToImage()).resize(640, 360).centerCrop().placeholder(R.drawable.download_loading).error(R.drawable.news).into(imageView); // download  image
+        }else{
+            Picasso.get().load(R.drawable.news).resize(640, 360).centerCrop().placeholder(R.drawable.download_loading).into(imageView); // download  image
+        }
         String title = news1.getTitle();
         if (title.toLowerCase().contains(queryText.toLowerCase()) && queryText != null) {
             int start = title.toLowerCase().indexOf(queryText.toLowerCase());
             int end = start + queryText.length();
             Spannable span  = new SpannableString(title);
-            span.setSpan(new BackgroundColorSpan(Color.YELLOW), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new BackgroundColorSpan(Color.MAGENTA), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.textViewTitle.setText(span);
         } else {
             holder.textViewTitle.setText(title);
@@ -211,20 +216,38 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> im
             return null;
         }
         final long diff = now - time;
-        if (diff < MINUTE_MILLIS) {
-            return "just now";
-        } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute ago";
-        } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes ago";
-        } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
-        } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " hours ago";
-        } else if (diff < 48 * HOUR_MILLIS) {
-            return "yesterday";
+        if (Locale.getDefault().getLanguage().equals("ru")) {
+            if (diff < MINUTE_MILLIS) {
+                return "только что";
+            } else if (diff < 2 * MINUTE_MILLIS) {
+                return "1 мин. назад";
+            } else if (diff < 50 * MINUTE_MILLIS) {
+                return diff / MINUTE_MILLIS + " мин. назад";
+            } else if (diff < 90 * MINUTE_MILLIS) {
+                return "1 ч. назад";
+            } else if (diff < 24 * HOUR_MILLIS) {
+                return diff / HOUR_MILLIS + " ч. назад";
+            } else if (diff < 48 * HOUR_MILLIS) {
+                return "вчера";
+            } else {
+                return diff / DAY_MILLIS + " дн. назад";
+            }
         } else {
-            return diff / DAY_MILLIS + " days ago";
+            if (diff < MINUTE_MILLIS) {
+                return "just now";
+            } else if (diff < 2 * MINUTE_MILLIS) {
+                return "a minute ago";
+            } else if (diff < 50 * MINUTE_MILLIS) {
+                return diff / MINUTE_MILLIS + " minutes ago";
+            } else if (diff < 90 * MINUTE_MILLIS) {
+                return "an hour ago";
+            } else if (diff < 24 * HOUR_MILLIS) {
+                return diff / HOUR_MILLIS + " hours ago";
+            } else if (diff < 48 * HOUR_MILLIS) {
+                return "yesterday";
+            } else {
+                return diff / DAY_MILLIS + " days ago";
+            }
         }
     }
     public void clear(){

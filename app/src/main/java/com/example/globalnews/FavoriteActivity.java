@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -38,33 +40,23 @@ public class FavoriteActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Switch switchDark;
     SharedPref mySharedPref ;
+    private static int currentTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         mySharedPref = new SharedPref(this);
         if(mySharedPref.loadNightModeState() == true){
             setTheme(R.style.DarkTheme);
+            currentTheme = R.style.DarkTheme;
         }else{
             setTheme(R.style.AppTheme);
+            currentTheme = R.style.AppTheme;
         }
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_favorite);
-        switchDark = findViewById(R.id.switchDark);
-        if(mySharedPref.loadNightModeState() == true){
-            switchDark.setChecked(true);
-        }
-        switchDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mySharedPref.setNightModeState(true);
-                    restartActivity();
-                }else{
-                    mySharedPref.setNightModeState(false);
-                    restartActivity();
-                }
-            }
-        });
+
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -137,7 +129,7 @@ public class FavoriteActivity extends AppCompatActivity {
                 String shareBody = newsAdapter.news.get(position).getUrl();
                 intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 intent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(intent, "Share using"));
+                startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
             }
         });
         newsAdapter.setClickOnAddToFavoriteListener(new NewsAdapter.ClickOnAddToFavoriteListener() {
@@ -155,6 +147,9 @@ public class FavoriteActivity extends AppCompatActivity {
         });
     }
     protected void onResume() {
+        if ((currentTheme != R.style.DarkTheme && mySharedPref.loadNightModeState()) || (currentTheme == R.style.DarkTheme && !mySharedPref.loadNightModeState())) {
+            recreate();
+        }
         super.onResume();
         bottomNavigationView.setSelectedItemId(R.id.nav_favorite);
         overridePendingTransition(0, 0);
@@ -170,10 +165,5 @@ public class FavoriteActivity extends AppCompatActivity {
             columnNumber = 1;
         }
         return columnNumber;
-    }
-    private void restartActivity(){
-        Intent i = new Intent(getApplicationContext(), FavoriteActivity.class);
-        startActivity(i);
-        finish();
     }
 }

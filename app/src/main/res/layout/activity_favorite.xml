@@ -30,9 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation"
         app:itemHorizontalTranslationEnabled="false"
         android:layout_gravity="bottom"
-        android:background="?attr/backgroungColorOfBottom"/>
+        android:background="?attr/backgroungColorOfBottom"
+        app:menu="@menu/bottom_navigation"
+        app:itemTextColor="@drawable/background_bottom_nav"
+        app:itemIconTint="@drawable/background_bottom_nav"/>
 
 </LinearLayout>

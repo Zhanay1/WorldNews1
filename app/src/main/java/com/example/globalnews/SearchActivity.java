@@ -61,36 +61,23 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     private static final int LOADER_ID = 2;
     private NewsViewModel newsViewModel;
     private static int page = 1;
-    private Switch switchDark;
-    SharedPref mySharedPref;
+    SharedPref mySharedPref ;
+    private static int currentTheme;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mySharedPref = new SharedPref(this);
         if(mySharedPref.loadNightModeState() == true){
             setTheme(R.style.DarkTheme);
+            currentTheme = R.style.DarkTheme;
         }else{
             setTheme(R.style.AppTheme);
+            currentTheme = R.style.AppTheme;
         }
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        switchDark = findViewById(R.id.switchDark);
-        if(mySharedPref.loadNightModeState() == true){
-            switchDark.setChecked(true);
-        }
-        switchDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mySharedPref.setNightModeState(true);
-                    restartActivity();
-                }else{
-                    mySharedPref.setNightModeState(false);
-                    restartActivity();
-                }
-            }
-        });
+
         editText = findViewById(R.id.editTextSearch);
         loaderManager = LoaderManager.getInstance(this);
         recyclerViewSource = findViewById(R.id.recycleViewSources);
@@ -184,7 +171,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                 String shareBody = searchAdapter.news.get(position).getUrl();
                 intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 intent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(intent, "Share using"));
+                startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
             }
         });
 
@@ -216,6 +203,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     }
     @Override
     protected void onResume() {
+        if ((currentTheme != R.style.DarkTheme && mySharedPref.loadNightModeState()) || (currentTheme == R.style.DarkTheme && !mySharedPref.loadNightModeState())) {
+            recreate();
+        }
         super.onResume();
         bottomNavigationView.setSelectedItemId(R.id.nav_search);
         overridePendingTransition(0, 0);
@@ -291,10 +281,5 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
             columnNumber = 1;
         }
         return columnNumber;
-    }
-    private void restartActivity(){
-        Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-        startActivity(i);
-        finish();
     }
 }

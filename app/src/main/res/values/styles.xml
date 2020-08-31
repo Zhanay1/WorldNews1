@@ -17,6 +17,7 @@
         <item name="backgroundcolorOfCategoryStroke">#CDCDCD</item>
         <item name="backgroundcolorOfCategorySelected">#ECF5FC</item>
         <item name="backgroungColorOfReadMore">#000</item>
+        <item name="backgroungColorOfBottomIcons">#757575</item>
 
     </style>
 
@@ -34,8 +35,9 @@
         <item name="backgroungColorOfCard">#313335</item>
         <item name="backgroundcolorOfCategory">#2D2F30</item>
         <item name="backgroundcolorOfCategoryStroke">#f0f0f0</item>
-        <item name="backgroundcolorOfCategorySelected">#595B5D</item>
+        <item name="backgroundcolorOfCategorySelected">#9A9DA1</item>
         <item name="backgroungColorOfReadMore">#f1f1f1</item>
+        <item name="backgroungColorOfBottomIcons">#717171</item>
     </style>
 
     </resources>

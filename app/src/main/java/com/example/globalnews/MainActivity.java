@@ -66,47 +66,70 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private FavoriteNews favoriteNews;
     private Toolbar toolbar;
     private RecyclerView recyclerViewFilter;
-
     private News news;
     private static final int LOADER_ID = 1;
     private LoaderManager loaderManager;
     private static boolean isLoading = false;
     private static int page = 1;
     private static String category = "general";
+    private static int categoryPosition = 0;
     static boolean scroll_down;
-    private Switch switchDark;
     SharedPref mySharedPref ;
+    private static int currentTheme;
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("selectedCategory", category);
+        outState.putInt("selectedCategoryPosition", categoryPosition);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         mySharedPref = new SharedPref(this);
         if(mySharedPref.loadNightModeState() == true){
             setTheme(R.style.DarkTheme);
+            currentTheme = R.style.DarkTheme;
         }else{
             setTheme(R.style.AppTheme);
+            currentTheme = R.style.AppTheme;
         }
-        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            category = savedInstanceState.getString("selectedCategory");
+            categoryPosition = savedInstanceState.getInt("selectedCategoryPosition");
+        }
+
         setContentView(R.layout.activity_main);
-        switchDark = findViewById(R.id.switchDark);
-        if(mySharedPref.loadNightModeState() == true){
-            switchDark.setChecked(true);
-        }
-        switchDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mySharedPref.setNightModeState(true);
-                    restartActivity();
-                }else{
-                    mySharedPref.setNightModeState(false);
-                    restartActivity();
-                }
-            }
-        });
+        // Dismiss Action
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
-        categoryAdapter = new CategoryAdapter();
+        toolbar.setNavigationIcon(R.drawable.ic_moon);
+        if (mySharedPref.loadNightModeState()){
+            toolbar.setNavigationIcon(R.drawable.ic_sun);
+        } else {
+            toolbar.setNavigationIcon(R.drawable.ic_moon);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentTheme == R.style.DarkTheme) {
+                    currentTheme = R.style.AppTheme;
+                    mySharedPref.setNightModeState(false);
+                    recreate();
+                } else {
+                    currentTheme = R.style.DarkTheme;
+                    mySharedPref.setNightModeState(true);
+                    recreate();
+                }
+            }
+        });
+        categoryAdapter = new CategoryAdapter(getString(R.string.general_category),
+                getString(R.string.entertainment_category), getString(R.string.business_category), getString(R.string.health_category),
+                getString(R.string.science_category), getString(R.string.sports_category), getString(R.string.technology_category));
         LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
         recyclerViewFilter = findViewById(R.id.filterNews);
         recyclerViewFilter.setAdapter(categoryAdapter);
@@ -155,13 +178,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
                 return false;
             }
-            });
+        });
 
+        categoryAdapter.setSelectedCategoryPosition(categoryPosition);
         categoryAdapter.setClickOnCategoryListener(new CategoryAdapter.ClickOnCategoryListener() {
             @Override
             public void ClickOnCategory(int position) {
-                if(category != categoryAdapter.getCategoryById(position)){
+                if(category != categoryAdapter.getCategoryById(position) && checkInternet()){
                     categoryAdapter.setSelectedCategoryPosition(position);
+                    categoryPosition = position;
                     category = categoryAdapter.getCategoryById(position);
                     page = 1;
                     DownloadData();
@@ -173,6 +198,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     } else {
                         recyclerViewFilter.smoothScrollToPosition(0);
                     }
+                }
+                else{
+                    Toast.makeText(MainActivity.this, R.string.check_connection, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -207,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         newsFromLiveData.observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(List<News> news2) {
-                    newsAdapter.setNews(news2);
+                newsAdapter.setNews(news2);
             }
         });
         newsAdapter.setClickOnShareListener(new NewsAdapter.ClickOnShareListener() {
@@ -218,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String shareBody = newsAdapter.news.get(position).getUrl();
                 intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 intent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(intent, "Share using"));
+                startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
             }
         });
 

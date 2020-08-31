@@ -55,34 +55,23 @@ public class DetailNewsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Switch switchDark;
     SharedPref mySharedPref;
+    private static int currentTheme;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         mySharedPref = new SharedPref(this);
         if(mySharedPref.loadNightModeState() == true){
             setTheme(R.style.DarkTheme);
+            currentTheme = R.style.DarkTheme;
         }else{
             setTheme(R.style.AppTheme);
+            currentTheme = R.style.AppTheme;
         }
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail_news);
-        switchDark = findViewById(R.id.switchDark);
-        if(mySharedPref.loadNightModeState() == true){
-            switchDark.setChecked(true);
-        }
-        switchDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mySharedPref.setNightModeState(true);
-                    restartActivity();
-                }else{
-                    mySharedPref.setNightModeState(false);
-                    restartActivity();
-                }
-            }
-        });
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -117,7 +106,7 @@ public class DetailNewsActivity extends AppCompatActivity {
 //        news = newsViewModel.getNewsById(id);
         textViewTitle.setText(title);
         if(author.equals("null") || author.isEmpty()){
-            textViewAuthor.setText("Unknown");
+            textViewAuthor.setText(R.string.unknown);
         }
         else {
             textViewAuthor.setText(author);
@@ -138,14 +127,17 @@ public class DetailNewsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        if(content.equals("null") || content.isEmpty()) {
+        if(description.equals("null") || description.isEmpty()) {
             textViewContent.setText("");
         }else{
-            textViewContent.setText(content.replaceAll("\\[[^{}]*]", ""));
+            textViewContent.setText(description.replaceAll("\\[[^{}]*]", "").trim().replaceAll("\\s+", " "));
         }
         textViewSourceName.setText(sourceName);
-        Picasso.get().load(urlToImage).resize(640, 360).placeholder(R.drawable.news).error(R.drawable.news).into(imageViewNews);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if(urlToImage != null && !urlToImage.isEmpty()) {
+            Picasso.get().load(R.drawable.news).resize(640, 360).centerInside().placeholder(R.drawable.download_loading).error(R.drawable.news).into(imageViewNews); // download  image
+        }else{
+            Picasso.get().load(urlToImage).resize(640, 360).placeholder(R.drawable.download_loading).into(imageViewNews); // download  image
+        }          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageViewNews.setClipToOutline(true);
         }
     }
@@ -177,7 +169,7 @@ public class DetailNewsActivity extends AppCompatActivity {
             String ShareSub = title;
             intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
             intent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(intent, "Share using"));
+            startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
         }
         else if (id == R.id.Favorites) {
             FavoriteNews favoriteNews = newsViewModel.getFavoriteNewsByTitle(this.title);
@@ -196,14 +188,12 @@ public class DetailNewsActivity extends AppCompatActivity {
     }
 
 
-     @Override
-     protected void onResume() {
-       super.onResume();
-       invalidateOptionsMenu();
-     }
-    private void restartActivity(){
-        Intent i = new Intent(getApplicationContext(), DetailNewsActivity.class);
-        startActivity(i);
-        finish();
+    @Override
+    protected void onResume() {
+        if ((currentTheme != R.style.DarkTheme && mySharedPref.loadNightModeState()) || (currentTheme == R.style.DarkTheme && !mySharedPref.loadNightModeState())) {
+            recreate();
+        }
+        super.onResume();
+        invalidateOptionsMenu();
     }
 }

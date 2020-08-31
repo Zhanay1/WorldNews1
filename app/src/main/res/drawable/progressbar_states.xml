@@ -10,7 +10,7 @@
     <item android1:id="@android:id/progress">
         <clip android1:clipOrientation="horizontal" android1:gravity="left">
             <shape android1:shape="line">
-                <stroke android1:width="2dp" android1:color="#5581F0"/>
+                <stroke android1:width="2dp" android1:color="?attr/backgroundcolorOfToolBar"/>
             </shape>
         </clip>
     </item>

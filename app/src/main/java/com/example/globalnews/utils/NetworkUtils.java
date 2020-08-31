@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class NetworkUtils {
@@ -37,11 +38,19 @@ public class NetworkUtils {
     //values from parameters
 
     private static final String API_KEY = "7927dc2284db4d77bc38255c4c873684";
-    private static final String COUNTRY = "us";
+    private static final String LANGUAGE = Locale.getDefault().getLanguage();
+    private static String COUNTRY;
     private static final String PUBLISHED_AT = "publishedAt";
 
     public static URL buildURl(int page, String category){
         URL result = null;
+
+        if (LANGUAGE.equals("ru")) {
+            COUNTRY = "ru";
+        } else {
+            COUNTRY = "us";
+        }
+
         Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(PARAMS_COUNTRY, COUNTRY)
                 .appendQueryParameter(PARAMS_CATEGORY, category)

@@ -15,19 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
     private List<String> categories;
+    private List<String> categoriesCopy;
     private int selectedCategoryPosition;
     private ClickOnCategoryListener clickOnCategoryListener;
-    public CategoryAdapter() {
+    public CategoryAdapter(String general, String entertainment, String business, String health, String science, String sport, String technology) {
         this.categories = new ArrayList<>();
-        categories.add("General");
-        categories.add("Entertainment");
-        categories.add("Business");
-        categories.add("Health");
-        categories.add("Science");
-        categories.add("Sports");
-        categories.add("Technology");
+        this.categoriesCopy = new ArrayList<>();
+        categories.add(general);
+        categories.add(entertainment);
+        categories.add(business);
+        categories.add(health);
+        categories.add(science);
+        categories.add(sport);
+        categories.add(technology);
+        categoriesCopy.add("General");
+        categoriesCopy.add("Entertainment");
+        categoriesCopy.add("Business");
+        categoriesCopy.add("Health");
+        categoriesCopy.add("Science");
+        categoriesCopy.add("Sports");
+        categoriesCopy.add("Technology");
         selectedCategoryPosition = 0;
     }
+
+
     public void setSelectedCategoryPosition(int selectedCategoryPosition) {
         this.selectedCategoryPosition = selectedCategoryPosition;
     }
@@ -47,8 +58,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void setClickOnCategoryListener(ClickOnCategoryListener clickOnCategoryListener) {
         this.clickOnCategoryListener = clickOnCategoryListener;
     }
-
-
 
     @NonNull
     @Override
@@ -70,7 +79,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
     @Override
     public int getItemCount() {
-        return categories.size();
+        return categoriesCopy.size();
     }
     public class CategoryHolder extends RecyclerView.ViewHolder {
         private TextView textViewCategory;
@@ -88,6 +97,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
     }
     public String getCategoryById(int position){
-        return categories.get(position);
+        return categoriesCopy.get(position);
     }
 }
